@@ -25,7 +25,7 @@ $body1 = '
     <![endif]-->
   </head>
   <body>
-  <div class="container">'
+  <div class="container-fluid">'
 
 $scriptPart = '<script>
     $("table").addClass("table table-striped");
@@ -39,15 +39,21 @@ $bodyend = '
 </body>
 </html>'
 
-$content = Get-MsolGroup | Select-Object displayname, description | ConvertTo-EnhancedHTMLFragment -TableCssClass "table table-striped table-hover" -As Table -MakeTableDynamic
+<#$content = Get-MsolGroup | Select-Object displayname, description | ConvertTo-EnhancedHTMLFragment -TableCssClass "table table-striped table-hover" -As Table -MakeTableDynamic
 
-$content2 = Get-MsolGroup | Select-Object displayname, description | ConvertTo-EnhancedHTMLFragment -TableCssClass "table table-striped table-hover" -As Table -MakeTableDynamic
+$content2 = Get-MsolGroup | Select-Object displayname, description | ConvertTo-EnhancedHTMLFragment -TableCssClass "table table-striped table-hover" -As Table -MakeTableDynamic#>
 
+$logs = Get-EventLog -LogName Application -Newest 100 | where -Property EntryType -EQ "information" | sort source | select Index, Source, Message | ConvertTo-EnhancedHTMLFragment -As Table -TableCssClass "table table-striped table-hover" -DivCssClass "col-sm-4"
+
+$logs = Get-EventLog -LogName Application -Newest 100 | where -Property Message -Contains "mycoach" | sort source | select Index, Source, Message | ConvertTo-EnhancedHTMLFragment -As Table -TableCssClass "table table-striped table-hover" -DivCssClass "col-sm-4"
 
 <#$content = Get-MsolGroup |Select-Object displayname, grouptype, description | ConvertTo-Html -Fragment #>
-$html = $body1 + $content + $content2 + $bodyend
+<#$html = $body1 + $content + $content2 + $bodyend#>
+<#
+$html | Out-File -Encoding utf8 test3.html #>
 
-$html | Out-File -Encoding utf8 test3.html 
+$html = $body1 + "<div class='row'>" + $logs +"</div>" + $bodyend
+$html | Out-File -Encoding utf8 logs.html
 
 
 <#$html | Out-Host#>
