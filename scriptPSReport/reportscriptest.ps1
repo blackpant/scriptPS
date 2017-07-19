@@ -39,21 +39,28 @@ $bodyend = '
 </body>
 </html>'
 
+$startrow = "<div class='row'>"
+$endrow = "</div>"
 <#$content = Get-MsolGroup | Select-Object displayname, description | ConvertTo-EnhancedHTMLFragment -TableCssClass "table table-striped table-hover" -As Table -MakeTableDynamic
 
 $content2 = Get-MsolGroup | Select-Object displayname, description | ConvertTo-EnhancedHTMLFragment -TableCssClass "table table-striped table-hover" -As Table -MakeTableDynamic#>
 
-$logs = Get-EventLog -LogName Application -Newest 100 | where -Property EntryType -EQ "information" | sort source | select Index, Source, Message | ConvertTo-EnhancedHTMLFragment -As Table -TableCssClass "table table-striped table-hover" -DivCssClass "col-sm-4"
+$logs = Get-EventLog -LogName Application -Newest 100 | where -Property EntryType -EQ "information" | sort source | select Index, Source, Message | ConvertTo-EnhancedHTMLFragment -As Table -TableCssClass "table table-striped table-hover" -DivCssClass "col-sm-6"
 
-$logs = Get-EventLog -LogName Application -Newest 100 | where -Property Message -Contains "mycoach" | sort source | select Index, Source, Message | ConvertTo-EnhancedHTMLFragment -As Table -TableCssClass "table table-striped table-hover" -DivCssClass "col-sm-4"
+$logs1 = Get-EventLog -LogName Application -Newest 100 | where -Property Message -Like "*mycoach*" | sort source | select Index, Source, Message | ConvertTo-EnhancedHTMLFragment -As Table -TableCssClass "table table-striped table-hover" -DivCssClass "col-sm-6"
+
+$BDRTable = $BDRvar | sort storage | ConvertTo-EnhancedHTMLFragment -As Table -TableCssClass "table table-striped table-hover" -DivCssClass "col-sm-6"
+$GROUPTable = $GROUPvar | sort storage | ConvertTo-EnhancedHTMLFragment -As Table -TableCssClass "table table-striped table-hover" -DivCssClass "col-sm-6"
+$STSTable = $STSvar | sort storage | ConvertTo-EnhancedHTMLFragment -As Table -TableCssClass "table table-striped table-hover" -DivCssClass "col-sm-6"
 
 <#$content = Get-MsolGroup |Select-Object displayname, grouptype, description | ConvertTo-Html -Fragment #>
 <#$html = $body1 + $content + $content2 + $bodyend#>
 <#
 $html | Out-File -Encoding utf8 test3.html #>
-
-$html = $body1 + "<div class='row'>" + $logs +"</div>" + $bodyend
-$html | Out-File -Encoding utf8 logs.html
+$stspart = $startrow + $STSTable + $endrow
+$bdrpart = $ts
+$html = $body1 + $startrow+ $BDRTable + $endrow + $startrow +  + $bodyend
+<#$html | Out-File -Encoding utf8 logs.html#>
 
 
 <#$html | Out-Host#>
