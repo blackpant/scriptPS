@@ -1,0 +1,2 @@
+PSproviders are a technology in Powershell = data structure
+
