@@ -24,15 +24,22 @@
 .FUNCTIONALITY
     The functionality that best describes this cmdlet
 #>
+function Get-SecEvents {
+    [cmdletbinding()]
+    Param (
+        $ComputerNameVar = ".",
+        $EventID = 4624,
+        $NumItems = 5 
+    )
 
-[cmdletbinding()]
-Param (
-    $ComputerNameVar = ".",
-    $EventID = 4624,
-    $NumItems = 5 
-)
+    Write-Verbose "About to run Get-EventLog on $ComputerNameVar"
 
+    Get-EventLog -LogName Security -ComputerName $ComputerNameVar |
+        Where-Object EventID -EQ $EventID |
+        Select-Object -First $NumItems    
+}
 
-Get-EventLog -LogName Security -ComputerName $ComputerNameVar |
-    Where-Object EventID -EQ $EventID |
-    Select-Object -First $NumItems
+function AddMe ($Num1, $Num2) {
+    $Num3 = $Num1 + $Num2
+    Return $Num3
+}
