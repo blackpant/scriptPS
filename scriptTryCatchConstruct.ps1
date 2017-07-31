@@ -1,4 +1,3 @@
-
 [cmdletbinding()]
 Param (
     $ComputerNameVar = ".",
@@ -6,6 +5,12 @@ Param (
     $NumItems = 5 
 )
 
+try {
+    mkdir "Logs" -ErrorAction Stop
+}
+catch {
+    Write-Verbose "Folder Already Exists."
+}
 
 Get-EventLog -LogName Security -ComputerName $ComputerNameVar |
     Where-Object EventID -EQ $EventID |

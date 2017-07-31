@@ -1,4 +1,3 @@
-
 [cmdletbinding()]
 Param (
     $ComputerNameVar = ".",
@@ -6,7 +5,9 @@ Param (
     $NumItems = 5 
 )
 
+md ".\Logs" -ErrorAction SilentlyContinue
 
 Get-EventLog -LogName Security -ComputerName $ComputerNameVar |
     Where-Object EventID -EQ $EventID |
-    Select-Object -First $NumItems
+    Select-Object -First $NumItems |
+    Out-File "Logs\EventsLogs.txt"
